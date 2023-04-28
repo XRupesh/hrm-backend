@@ -72,7 +72,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             usersRepository.save(users);
 
             ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.OK.value(), "Organization created successfully", new OrganizationDTO(organization,users));
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (BadRequestException ex) {
             ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
