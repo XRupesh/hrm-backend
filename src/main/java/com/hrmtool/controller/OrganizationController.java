@@ -1,9 +1,11 @@
 package com.hrmtool.controller;
 
 import com.hrmtool.config.Constant;
+import com.hrmtool.dto.EmailDetails;
 import com.hrmtool.globalHandler.response.ApiResponse;
 import com.hrmtool.persistance.dto.OrganizationDTO;
 import com.hrmtool.service.OrganizationService;
+import com.hrmtool.service.SESService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ import java.util.List;
         produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrganizationController {
 
+    private final SESService service;
     private final OrganizationService organizationService;
     private static final Logger logger = LoggerFactory.getLogger(OrganizationController.class);
 
@@ -76,5 +79,10 @@ public class OrganizationController {
     @DeleteMapping(value = Constant.Path.Organization.ORGANIZATION_DELETE)
     public ResponseEntity<ApiResponse<OrganizationDTO>> deleteOrganization(@PathVariable Integer organizationCode) {
         return organizationService.deleteOrganization(organizationCode);
+    }
+
+    @PostMapping("/sendEmail")
+    public ResponseEntity<?> sendMessage(@RequestBody EmailDetails emailDetails) {
+        return ResponseEntity.ok(service.sendEmail(emailDetails));
     }
 }
