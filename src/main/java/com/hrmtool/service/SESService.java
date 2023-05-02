@@ -30,7 +30,7 @@ public class SESService {
 
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setFrom("siphiwe.mathebula@xgileit.com");
+            simpleMailMessage.setFrom("rupeshgaudel3@gmail.com");
             simpleMailMessage.setTo(emailDetails.getToEmail());
             simpleMailMessage.setSubject("Registration Confirmation");
             simpleMailMessage.setText(emailDetails.getBody());
@@ -43,7 +43,7 @@ public class SESService {
 
             SendTemplatedEmailRequest templatedEmailRequest = new SendTemplatedEmailRequest();
             templatedEmailRequest.withDestination(destination);
-            templatedEmailRequest.withTemplate("Template");
+            templatedEmailRequest.withTemplate("MyTemp");
             JsonObject templateData = new JsonObject();
             templateData.addProperty("name", emailDetails.getFirstName());
             templatedEmailRequest.withTemplateData(templateData.toString());
