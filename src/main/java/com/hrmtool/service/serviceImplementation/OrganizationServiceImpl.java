@@ -1,5 +1,6 @@
 package com.hrmtool.service.serviceImplementation;
 
+import com.hrmtool.dto.EmailDetails;
 import com.hrmtool.globalHandler.BadRequestException;
 import com.hrmtool.globalHandler.NotFoundException;
 import com.hrmtool.globalHandler.response.ApiResponse;
@@ -9,8 +10,8 @@ import com.hrmtool.persistance.entity.Users;
 import com.hrmtool.persistance.repository.OrganizationRepo;
 import com.hrmtool.persistance.repository.UsersRepo;
 import com.hrmtool.service.OrganizationService;
+import com.hrmtool.service.SESService;
 import com.hrmtool.utils.PasswordEncrypterDecrypter;
-import com.hrmtool.utils.RequestValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationRepo organizationRepository;
     private final UsersRepo usersRepository;
+    private final SESService sesService;
 
     /**
      * Functionality related to registration of organization and admin user
@@ -39,7 +41,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         //Check if domain name already exist
         Optional<Organization> checkOrgDomain = organizationRepository.findByDomain(organizationDTO.getDomain());
-        if (!checkOrgDomain.isEmpty()){
+        if (!checkOrgDomain.isEmpty()) {
             throw new BadRequestException("Domain name already exists please choose another one !!");
         }
 
@@ -61,7 +63,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             Users users = Users.builder()
                     .firstName(organizationDTO.getFirstName())
                     .lastName(organizationDTO.getLastName())
-                    .username(organizationDTO.getFirstName().concat(" "+organizationDTO.getLastName()))
+                    .username(organizationDTO.getFirstName().concat(" " + organizationDTO.getLastName()))
                     .password(PasswordEncrypterDecrypter.encrypt(organizationDTO.getPassword()))
                     .primaryEmail(organizationDTO.getPrimaryEmail())
                     .organization(organization)
@@ -71,7 +73,22 @@ public class OrganizationServiceImpl implements OrganizationService {
 
             usersRepository.save(users);
 
-            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.OK.value(), "Organization created successfully", new OrganizationDTO(organization,users));
+
+            // Email object creation
+            EmailDetails emailDetails = EmailDetails.builder()
+                    .toEmail(users.getPrimaryEmail())
+                    .firstName(users.getFirstName())
+                    .body("Testing")
+                    .build();
+
+            //Calling Mail service
+            try {
+                sesService.sendEmail(emailDetails);
+            } catch (Exception e) {
+                throw new RuntimeException("Error while sending mail");
+            }
+
+            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.OK.value(), "Organization created successfully", new OrganizationDTO(organization, users));
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (BadRequestException ex) {
             ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null);
@@ -142,20 +159,18 @@ public class OrganizationServiceImpl implements OrganizationService {
             List<Users> users = usersRepository.getByOrganization(organization);
             if (users.isEmpty()) {
                 organizationRepository.delete(organization);
-            }else {
+            } else {
                 throw new RuntimeException("Unable to delete.There are users in this organization.");
             }
             ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.OK.value(), "Organization deleted successfully", null);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }catch (NotFoundException ex) {
+        } catch (NotFoundException ex) {
             ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
-        catch (RuntimeException ex) {
+        } catch (RuntimeException ex) {
             ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
