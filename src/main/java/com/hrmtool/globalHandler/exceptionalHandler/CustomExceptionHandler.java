@@ -1,8 +1,6 @@
 package com.hrmtool.globalHandler.exceptionalHandler;
 
-import com.hrmtool.globalHandler.BadRequestException;
-import com.hrmtool.globalHandler.NotFoundException;
-import com.hrmtool.globalHandler.UnauthorizedException;
+import com.hrmtool.globalHandler.*;
 import com.hrmtool.globalHandler.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +34,18 @@ public class CustomExceptionHandler {
     protected ResponseEntity<ApiResponse<?>> handleUnauthorizedException(Exception ex, WebRequest request) {
         ApiResponse<?> response = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), null);
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(value = {TemplateException.class})
+    protected ResponseEntity<ApiResponse<?>> handleTemplateException(Exception ex, WebRequest request) {
+        ApiResponse<?> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {InvalidTokenException.class})
+    protected ResponseEntity<ApiResponse<?>> handleInvalidTokenException(Exception ex, WebRequest request) {
+        ApiResponse<?> response = new ApiResponse<>(HttpStatus.FORBIDDEN.value(), ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 
 }
