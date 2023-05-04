@@ -32,7 +32,7 @@ public class Role extends BaseEntity implements Serializable {
     @Column(name = "modified_by")
     private String modifiedBy;
 
-    @Column(name = "is_geust_user_allowed")
+    @Column(name = "is_guest_user_allowed")
     private Boolean isGuestUserAllowed;
 
     @ManyToOne(fetch = FetchType.LAZY)

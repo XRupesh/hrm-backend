@@ -6,7 +6,7 @@ CREATE TABLE "role" (
   "modify_date" timestamp,
   "modified_by" varchar(255),
   "modification_time" timestamp,
-  "is_geust_user_allowed" boolean,
+  "is_guest_user_allowed" boolean,
   "organization_id" int
 );
 
