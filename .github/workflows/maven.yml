@@ -25,7 +25,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ steps.login-ecr.outputs.registry }}/hrm-tool:latest
+        tags: ${{ steps.login-ecr.outputs.registry }}/hrm-backend:latest
 
     - name: Install and configure AWS CLI
       run: |
