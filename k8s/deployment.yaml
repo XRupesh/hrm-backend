@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: hrm-backend
-          image: public.ecr.aws/s4z8s2t9/repo-hrm
+          image:
           ports:
             - containerPort: 8080
           env:
