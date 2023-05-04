@@ -5,10 +5,8 @@ import com.hrmtool.globalHandler.BadRequestException;
 import com.hrmtool.globalHandler.NotFoundException;
 import com.hrmtool.globalHandler.response.ApiResponse;
 import com.hrmtool.persistance.dto.OrganizationDTO;
-import com.hrmtool.persistance.entity.Organization;
-import com.hrmtool.persistance.entity.Users;
-import com.hrmtool.persistance.repository.OrganizationRepo;
-import com.hrmtool.persistance.repository.UsersRepo;
+import com.hrmtool.persistance.entity.*;
+import com.hrmtool.persistance.repository.*;
 import com.hrmtool.service.OrganizationService;
 import com.hrmtool.service.SESService;
 import com.hrmtool.utils.PasswordEncrypterDecrypter;
@@ -31,6 +29,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationRepo organizationRepository;
     private final UsersRepo usersRepository;
+    private final RoleRepo roleRepository;
+    private final RoleUserMappingRepo roleUserMappingRepository;
+    private final RolePermissionMappingRepo rolePermissionMappingRepository;
+    private final PermissionRepo permissionRepository;
     private final SESService sesService;
 
     /**
@@ -59,6 +61,29 @@ public class OrganizationServiceImpl implements OrganizationService {
 
             organizationRepository.save(organization);
 
+
+            //Create SuperAdmin role
+            Role role = Role.builder()
+                    .roleName("SUPER_ADMIN")
+                    .isGuestUserAllowed(false)
+                    .organization(organization)
+                    .build();
+
+            roleRepository.save(role);
+
+            //Get All permission list
+            List<Permission> permissionList = permissionRepository.findAll();
+
+            //Add all permission to SUPER_ADMIN Role
+            for (Permission permission : permissionList) {
+                RolePermissionMapping rolePermissionMapping = RolePermissionMapping.builder()
+                        .role(role)
+                        .permission(permission)
+                        .build();
+
+                rolePermissionMappingRepository.save(rolePermissionMapping);
+            }
+
             //Setup User
             Users users = Users.builder()
                     .firstName(organizationDTO.getFirstName())
@@ -72,6 +97,16 @@ public class OrganizationServiceImpl implements OrganizationService {
                     .build();
 
             usersRepository.save(users);
+
+
+            //Role User Mapping
+            RoleUserMapping roleUserMapping = RoleUserMapping.builder()
+                    .role(role)
+                    .user(users)
+                    .build();
+
+            roleUserMappingRepository.save(roleUserMapping);
+
 
 
             // Email object creation

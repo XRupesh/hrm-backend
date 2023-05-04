@@ -26,9 +26,6 @@ public class Role extends BaseEntity implements Serializable {
     @Column(name = "role_name")
     private String roleName;
 
-    @Column(name = "status")
-    private String status;
-
     @Column(name = "modified_by")
     private String modifiedBy;
 
