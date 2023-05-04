@@ -1,4 +1,4 @@
-name: Deploy to ECR and EKS
+name: Build and Deploy
 
 on:
   push:
@@ -6,44 +6,48 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags: ${{ steps.login-ecr.outputs.registry }}/hrm-backend:latest
+      - name: Set up environment
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_REGION=your-region" >> $GITHUB_ENV
 
-    - name: Install and configure AWS CLI
-      run: |
-        sudo apt-get install -y awscli
-        echo ${{ secrets.AWS_ACCESS_KEY_ID }} | aws configure set aws_access_key_id --profile default
-        echo ${{ secrets.AWS_SECRET_ACCESS_KEY }} | aws configure set aws_secret_access_key --profile default
-        echo ${{ secrets.AWS_REGION }} | aws configure set region --profile default
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Install and configure kubectl
-      run: |
-        VERSION=$(curl --silent https://storage.googleapis.com/kubernetes-release/release/stable.txt)
-        curl https://storage.googleapis.com/kubernetes-release/release/$VERSION/bin/linux/amd64/kubectl \
-          --location --remote-name --progress
-        chmod +x ./kubectl
-        sudo mv ./kubectl /usr/local/bin/
-        aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name hrmtool
+      - name: Build and push Docker image
+        run: |
+          export ECR_REPOSITORY=${{ steps.login-ecr.outputs.registry }}/your-ecr-repo-name
+          export VERSION_TAG=$(echo $GITHUB_SHA | head -c7)
+          docker build -t $ECR_REPOSITORY:$VERSION_TAG .
+          docker push $ECR_REPOSITORY:$VERSION_TAG
 
-    - name: Deploy to Amazon EKS
-      run: |
-        envsubst < k8s/kustomization.tmpl.yaml > k8s/kustomization.yaml
-        kubectl kustomize k8s | kubectl apply -f -
+      - name: Install and configure AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+          aws eks update-kubeconfig --region $AWS_REGION --name your-eks-cluster-name
+
+      - name: Deploy to Amazon EKS
+        run: |
+          export VERSION_TAG=$(echo $GITHUB_SHA | head -c7)
+          envsubst < k8s/kustomization.tmpl.yaml > k8s/kustomization.yaml
+          kubectl kustomize k8s | kubectl apply -f -
