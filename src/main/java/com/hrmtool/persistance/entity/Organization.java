@@ -1,10 +1,11 @@
 package com.hrmtool.persistance.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
 
 @Data
 @Builder
@@ -12,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "organization")
-public class Organization extends BaseEntity{
+public class Organization extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +34,8 @@ public class Organization extends BaseEntity{
 
     @Column(name = "domain")
     private String domain;
+
+    public void updateStatus(boolean status) {
+        super.updateStatus(status);
+    }
 }

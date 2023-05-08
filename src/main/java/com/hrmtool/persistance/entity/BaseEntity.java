@@ -27,4 +27,8 @@ public abstract class BaseEntity {
     protected void onUpdate() {
         modifiedDate = new Date();
     }
+
+    protected void updateStatus(boolean status){
+        this.status = status;
+    }
 }

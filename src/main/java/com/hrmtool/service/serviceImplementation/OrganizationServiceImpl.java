@@ -193,7 +193,8 @@ public class OrganizationServiceImpl implements OrganizationService {
             Organization organization = organizationRepository.findById(organizationCode).orElseThrow(() -> new NotFoundException("Organization not found with ID: " + organizationCode));
             List<Users> users = usersRepository.getByOrganization(organization);
             if (users.isEmpty()) {
-                organizationRepository.delete(organization);
+                organization.updateStatus(false);
+                organizationRepository.save(organization);
             } else {
                 throw new RuntimeException("Unable to delete.There are users in this organization.");
             }
