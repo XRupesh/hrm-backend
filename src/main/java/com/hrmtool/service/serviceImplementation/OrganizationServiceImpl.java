@@ -1,10 +1,10 @@
 package com.hrmtool.service.serviceImplementation;
 
-import com.hrmtool.dto.EmailDetails;
+import com.hrmtool.persistance.dto.EmailDetails;
 import com.hrmtool.globalHandler.BadRequestException;
 import com.hrmtool.globalHandler.NotFoundException;
 import com.hrmtool.globalHandler.response.ApiResponse;
-import com.hrmtool.persistance.dto.OrganizationDTO;
+import com.hrmtool.persistance.dto.OrganizationDto;
 import com.hrmtool.persistance.entity.*;
 import com.hrmtool.persistance.repository.*;
 import com.hrmtool.service.OrganizationService;
@@ -39,7 +39,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * Functionality related to registration of organization and admin user
      */
     @Override
-    public ResponseEntity<ApiResponse<OrganizationDTO>> createOrganization(OrganizationDTO organizationDTO) {
+    public ResponseEntity<ApiResponse<OrganizationDto>> createOrganization(OrganizationDto organizationDTO) {
 
         //Check if domain name already exist
         Optional<Organization> checkOrgDomain = organizationRepository.findByDomain(organizationDTO.getDomain());
@@ -123,49 +123,49 @@ public class OrganizationServiceImpl implements OrganizationService {
                 throw new RuntimeException("Error while sending mail");
             }
 
-            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.OK.value(), "Organization created successfully", new OrganizationDTO(organization, users));
+            ApiResponse<OrganizationDto> response = new ApiResponse<>(HttpStatus.OK.value(), "Organization created successfully", new OrganizationDto(organization, users));
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (BadRequestException ex) {
-            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null);
+            ApiResponse<OrganizationDto> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch (Exception ex) {
-            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), null);
+            ApiResponse<OrganizationDto> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public ResponseEntity<ApiResponse<OrganizationDTO>> getOrganizationById(Integer organizationCode) {
+    public ResponseEntity<ApiResponse<OrganizationDto>> getOrganizationById(Integer organizationCode) {
         try {
             Organization organization = organizationRepository.findById(organizationCode).orElseThrow(() -> new NotFoundException("Organization not found with ID: " + organizationCode));
-            OrganizationDTO organizationDTO = new OrganizationDTO(organization);
+            OrganizationDto organizationDTO = new OrganizationDto(organization);
 
-            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.OK.value(), "Organization retrieved successfully", organizationDTO);
+            ApiResponse<OrganizationDto> response = new ApiResponse<>(HttpStatus.OK.value(), "Organization retrieved successfully", organizationDTO);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception ex) {
-            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), null);
+            ApiResponse<OrganizationDto> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public ResponseEntity<ApiResponse<List<OrganizationDTO>>> getAllOrganizations() {
+    public ResponseEntity<ApiResponse<List<OrganizationDto>>> getAllOrganizations() {
         try {
             List<Organization> organizations = organizationRepository.findAll();
-            List<OrganizationDTO> organizationDTOs = organizations.stream()
-                    .map(OrganizationDTO::new)
+            List<OrganizationDto> organizationDtos = organizations.stream()
+                    .map(OrganizationDto::new)
                     .collect(Collectors.toList());
 
-            ApiResponse<List<OrganizationDTO>> response = new ApiResponse<>(HttpStatus.OK.value(), "Organizations retrieved successfully", organizationDTOs);
+            ApiResponse<List<OrganizationDto>> response = new ApiResponse<>(HttpStatus.OK.value(), "Organizations retrieved successfully", organizationDtos);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception ex) {
-            ApiResponse<List<OrganizationDTO>> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), null);
+            ApiResponse<List<OrganizationDto>> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public ResponseEntity<ApiResponse<OrganizationDTO>> updateOrganization(OrganizationDTO organizationdto) {
+    public ResponseEntity<ApiResponse<OrganizationDto>> updateOrganization(OrganizationDto organizationdto) {
         try {
             Organization existingOrganization = organizationRepository.findById(organizationdto.getOrganizationCode()).orElseThrow(() -> new NotFoundException("Organization not found with ID: " + organizationdto.getOrganizationCode()));
             existingOrganization.setName(organizationdto.getName());
@@ -173,22 +173,22 @@ public class OrganizationServiceImpl implements OrganizationService {
             existingOrganization.setSize(organizationdto.getSize());
             existingOrganization.setCountry(organizationdto.getCountry());
             organizationRepository.save(existingOrganization);
-            OrganizationDTO updatedOrganizationDTO = new OrganizationDTO(existingOrganization);
+            OrganizationDto updatedOrganizationDto = new OrganizationDto(existingOrganization);
 
-            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.OK.value(), "Organization updated successfully", updatedOrganizationDTO);
+            ApiResponse<OrganizationDto> response = new ApiResponse<>(HttpStatus.OK.value(), "Organization updated successfully", updatedOrganizationDto);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (NotFoundException ex) {
-            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), ex.getMessage(), null);
+            ApiResponse<OrganizationDto> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 
         } catch (Exception ex) {
-            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), null);
+            ApiResponse<OrganizationDto> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public ResponseEntity<ApiResponse<OrganizationDTO>> deleteOrganization(Integer organizationCode) {
+    public ResponseEntity<ApiResponse<OrganizationDto>> deleteOrganization(Integer organizationCode) {
         try {
             Organization organization = organizationRepository.findById(organizationCode).orElseThrow(() -> new NotFoundException("Organization not found with ID: " + organizationCode));
             List<Users> users = usersRepository.getByOrganization(organization);
@@ -198,16 +198,16 @@ public class OrganizationServiceImpl implements OrganizationService {
             } else {
                 throw new RuntimeException("Unable to delete.There are users in this organization.");
             }
-            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.OK.value(), "Organization deleted successfully", null);
+            ApiResponse<OrganizationDto> response = new ApiResponse<>(HttpStatus.OK.value(), "Organization deleted successfully", null);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (NotFoundException ex) {
-            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), ex.getMessage(), null);
+            ApiResponse<OrganizationDto> response = new ApiResponse<>(HttpStatus.NOT_FOUND.value(), ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         } catch (RuntimeException ex) {
-            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), ex.getMessage(), null);
+            ApiResponse<OrganizationDto> response = new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch (Exception ex) {
-            ApiResponse<OrganizationDTO> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), null);
+            ApiResponse<OrganizationDto> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

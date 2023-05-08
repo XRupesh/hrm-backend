@@ -1,6 +1,5 @@
 package com.hrmtool.persistance.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hrmtool.persistance.entity.Organization;
 import com.hrmtool.persistance.entity.Users;
@@ -10,7 +9,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrganizationDTO {
+public class OrganizationDto {
 
     //Organization Details
     @JsonProperty("organization_code")
@@ -36,7 +35,7 @@ public class OrganizationDTO {
 
 
 
-    public OrganizationDTO(Organization organization, Users users) {
+    public OrganizationDto(Organization organization, Users users) {
         this.organizationCode = organization.getOrganizationCode();
         this.name = organization.getName();
         this.domain = organization.getDomain();
@@ -50,7 +49,7 @@ public class OrganizationDTO {
         this.password = "*********";
     }
 
-    public OrganizationDTO(Organization organization) {
+    public OrganizationDto(Organization organization) {
         this.organizationCode = organization.getOrganizationCode();
         this.name = organization.getName();
         this.domain = organization.getDomain();
