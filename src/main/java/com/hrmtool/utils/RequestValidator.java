@@ -1,7 +1,6 @@
 package com.hrmtool.utils;
 
 import com.hrmtool.globalHandler.BadRequestException;
-import com.hrmtool.persistance.dto.OrganizationDTO;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

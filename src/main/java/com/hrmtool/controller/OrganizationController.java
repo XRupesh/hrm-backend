@@ -1,9 +1,9 @@
 package com.hrmtool.controller;
 
 import com.hrmtool.config.Constant;
-import com.hrmtool.dto.EmailDetails;
+import com.hrmtool.persistance.dto.EmailDetails;
 import com.hrmtool.globalHandler.response.ApiResponse;
-import com.hrmtool.persistance.dto.OrganizationDTO;
+import com.hrmtool.persistance.dto.OrganizationDto;
 import com.hrmtool.service.OrganizationService;
 import com.hrmtool.service.SESService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class OrganizationController {
      * @return ResponseEntity object
      */
     @PostMapping(value = Constant.Path.Organization.ORGANIZATION_REGISTRATION)
-    public ResponseEntity<ApiResponse<OrganizationDTO>> createOrganization(@RequestBody OrganizationDTO organizationDTO) {
+    public ResponseEntity<ApiResponse<OrganizationDto>> createOrganization(@RequestBody OrganizationDto organizationDTO) {
         logger.info("Organization Registration request: {} {}", organizationDTO);
         return organizationService.createOrganization(organizationDTO);
     }
@@ -45,7 +45,7 @@ public class OrganizationController {
      * @return ResponseEntity object
      */
     @GetMapping(value = Constant.Path.Organization.ORGANIZATION_FETCH_BY_ORGCODE)
-    public ResponseEntity<ApiResponse<OrganizationDTO>> getOrganization(@PathVariable Integer organizationCode) {
+    public ResponseEntity<ApiResponse<OrganizationDto>> getOrganization(@PathVariable Integer organizationCode) {
         return organizationService.getOrganizationById(organizationCode);
     }
 
@@ -55,7 +55,7 @@ public class OrganizationController {
      * @return ResponseEntity object
      */
     @GetMapping(value = Constant.Path.Organization.ORGANIZATION_FETCH_ALL)
-    public ResponseEntity<ApiResponse<List<OrganizationDTO>>> getAllOrganizations() {
+    public ResponseEntity<ApiResponse<List<OrganizationDto>>> getAllOrganizations() {
         return organizationService.getAllOrganizations();
     }
 
@@ -66,7 +66,7 @@ public class OrganizationController {
      * @return ResponseEntity object
      */
     @PutMapping(value = Constant.Path.Organization.ORGANIZATION_UPDATE)
-    public ResponseEntity<ApiResponse<OrganizationDTO>> updateOrganization(@RequestBody OrganizationDTO organizationDTO) {
+    public ResponseEntity<ApiResponse<OrganizationDto>> updateOrganization(@RequestBody OrganizationDto organizationDTO) {
         return organizationService.updateOrganization(organizationDTO);
     }
 
@@ -77,7 +77,7 @@ public class OrganizationController {
      * @return ResponseEntity object
      */
     @DeleteMapping(value = Constant.Path.Organization.ORGANIZATION_DELETE)
-    public ResponseEntity<ApiResponse<OrganizationDTO>> deleteOrganization(@PathVariable Integer organizationCode) {
+    public ResponseEntity<ApiResponse<OrganizationDto>> deleteOrganization(@PathVariable Integer organizationCode) {
         return organizationService.deleteOrganization(organizationCode);
     }
 

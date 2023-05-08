@@ -1,4 +1,4 @@
-package com.hrmtool.dto;
+package com.hrmtool.persistance.dto;
 
 import lombok.Builder;
 import lombok.Getter;
