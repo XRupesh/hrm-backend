@@ -9,6 +9,7 @@ public class Constant {
         public static final String ORGANIZATION = "/organization";
         public static final String ROLES = "/roles";
         public static final String PERMISSION = "/permission";
+        public static final String EMPLOYEE = "/employee";
 
         public final class Organization {
 
@@ -57,6 +58,21 @@ public class Constant {
             public static final String DELETE_PERMISSION = PERMISSION_CONTROLLER + "/delete";
 
             public static final String UPDATE_PERMISSION = PERMISSION_CONTROLLER + "/update";
+
+        }
+
+        public final class Employee {
+
+            public static final String EMPLOYEE_CONTROLLER = API + EMPLOYEE;
+            public static final String ADD_EMPLOYEE = "/registration";
+
+            public static final String UPDATE_EMPLOYEE = "/update";
+
+            public static final String FETCH_BY_EMPLOYEE_ID = "/get/{organizationCode}";
+
+            public static final String FETCH_ALL_EMPLOYEE = "/getAll";
+
+            public static final String DELETE_EMPLOYEE = "/delete/{organizationCode}";
 
         }
     }
