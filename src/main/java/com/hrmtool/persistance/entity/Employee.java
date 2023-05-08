@@ -1,20 +1,19 @@
 package com.hrmtool.persistance.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "employee")
-public class Employee extends BaseEntity{
+public class Employee extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,24 +22,23 @@ public class Employee extends BaseEntity{
 
     //Employee Personal Details
 
-    @Column(name = "first_name",nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @Column(name = "middle_name")
     private String middleName;
 
-    @Column(name = "last_name",nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "email",nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "phone_number",nullable = false)
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Column(name = "birth_date",nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date birthDate;
+    @Column(name = "birth_date", nullable = false)
+    private LocalDate birthDate;
 
     @Column(name = "gender")
     private String gender;
@@ -59,12 +57,12 @@ public class Employee extends BaseEntity{
     @Column(name = "designation")
     private String designation;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reports_to_id")
     private Employee reportsTo;
 
     @Column(name = "salary")
-    private String salary;
+    private Double salary;
 
     @Column(name = "salary_type")
     private String salaryType;
@@ -72,17 +70,17 @@ public class Employee extends BaseEntity{
     @Column(name = "employment_status")
     private String employmentStatus;
 
-    @Column(name = "start_date",nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date startDate;
+    @Column(name = "start_date", nullable = false)
+    private LocalDate startDate;
 
     @Column(name = "end_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date endDate;
+    private LocalDate endDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organization_id")
-    private Organization organization;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "employee_legal_entity",
+            joinColumns = @JoinColumn(name = "employee_code"),
+            inverseJoinColumns = @JoinColumn(name = "legal_entity_code")
+    )
+    private Set<LegalEntity> legalEntities = new HashSet<>();
+
 }
-
-
