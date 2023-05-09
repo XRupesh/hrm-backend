@@ -2,13 +2,20 @@ package com.hrmtool.persistance.dto;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hrmtool.enums.EmploymentStatus;
+import com.hrmtool.persistance.entity.Department;
 import com.hrmtool.persistance.entity.Employee;
+import com.hrmtool.persistance.entity.Job;
 import com.hrmtool.persistance.entity.LegalEntity;
+import com.hrmtool.persistance.repository.DepartmentRepo;
+import com.hrmtool.persistance.repository.JobRepo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +28,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class EmployeeDto {
 
+	@Autowired
+	private JobRepo jobRepo;
 	
+	@Autowired
+	private DepartmentRepo departmentRepo;
 	
 	@JsonProperty("employee_code")
 	private Integer employeeCode;
@@ -112,10 +123,23 @@ public class EmployeeDto {
 	}
 
 	public Employee toEmployee() {
+		
+		Optional<Job>  empJob= jobRepo.findById(this.job);
+		Optional<Department>  empDepartment= departmentRepo.findById(this.department);
+		Job job=null;
+		Department department=null;
+		if(empJob.isPresent())
+		{
+			job=empJob.get();
+		}
+		if(empDepartment.isPresent())
+		{
+		 department =empDepartment.get();
+		}
 		return Employee.builder().employeeCode(this.employeeCode).firstName(this.firstName).middleName(this.middleName)
 				.lastName(this.lastName).email(this.email).phoneNumber(this.phoneNumber).birthDate(this.birthDate)
 				.gender(this.gender).maritalStatus(this.maritalStatus).street(this.address)
-				.salary(this.salary).salaryType(this.salaryType)
+				.job(job).department(department).salary(this.salary).salaryType(this.salaryType)
 				.employmentStatus(EmploymentStatus.valueOf(this.getEmploymentStatus())).startDate(this.startDate).endDate(this.endDate).build();
 	}
 
