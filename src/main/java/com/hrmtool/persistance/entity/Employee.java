@@ -1,14 +1,26 @@
 package com.hrmtool.persistance.entity;
 
-import lombok.*;
-
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
@@ -50,12 +62,13 @@ public class Employee extends BaseEntity {
     private String street;
 
     //Employee-Organization details
-
-    @Column(name = "job_title")
-    private String jobTitle;
-
-    @Column(name = "designation")
-    private String designation;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "job_id")
+    private Job job;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "department_id")
+    private Department department;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reports_to_id")
@@ -68,7 +81,7 @@ public class Employee extends BaseEntity {
     private String salaryType;
 
     @Column(name = "employment_status")
-    private String employmentStatus;
+    private Enum employmentStatus;
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;

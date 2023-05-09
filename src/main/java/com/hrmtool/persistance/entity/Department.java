@@ -14,14 +14,13 @@ import lombok.Data;
 @Builder
 @Entity
 @Table(name = "Department")
-public class Department extends BaseEntity 
-{
+public class Department extends BaseEntity {
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "department_id")
-    private Integer departmentId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "department_id")
+	private Integer departmentId;
 
-    @Column(name = "name")
-    private String name;
+	@Column(name = "name")
+	private String name;
 
 }
