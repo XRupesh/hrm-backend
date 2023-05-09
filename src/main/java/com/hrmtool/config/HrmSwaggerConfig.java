@@ -23,7 +23,7 @@ public class HrmSwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.xgileit.hrm"))
+                .apis(RequestHandlerSelectors.basePackage("com.hrmtool"))
                 .paths(PathSelectors.any()).build();
     }
 
