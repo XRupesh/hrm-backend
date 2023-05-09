@@ -10,6 +10,8 @@ public class Constant {
         public static final String ROLES = "/roles";
         public static final String PERMISSION = "/permission";
         public static final String EMPLOYEE = "/employee";
+        public static final String JOB = "/job";
+        public static final String DEPARTMENT = "/department";
 
         public final class Organization {
 
@@ -73,6 +75,36 @@ public class Constant {
             public static final String FETCH_ALL_EMPLOYEE = "/getAll";
 
             public static final String DELETE_EMPLOYEE = "/delete/{organizationCode}";
+
+        }
+
+        public final class Job {
+
+            public static final String JOB_CONTROLLER = API + JOB;
+            public static final String ADD_JOB = "/registration";
+
+            public static final String UPDATE_JOB = "/update";
+
+            public static final String FETCH_BY_JOB_ID = "/get/{organizationCode}";
+
+            public static final String FETCH_ALL_JOB = "/getAll";
+
+            public static final String DELETE_JOB = "/delete/{organizationCode}";
+
+        }
+
+        public final class Department {
+
+            public static final String DEPARTMENT_CONTROLLER = API + EMPLOYEE;
+            public static final String ADD_DEPARTMENT = "/registration";
+
+            public static final String UPDATE_DEPARTMENT = "/update";
+
+            public static final String FETCH_BY_DEPARTMENT_ID = "/get/{organizationCode}";
+
+            public static final String FETCH_ALL_DEPARTMENT = "/getAll";
+
+            public static final String DELETE_DEPARTMENT = "/delete/{organizationCode}";
 
         }
     }

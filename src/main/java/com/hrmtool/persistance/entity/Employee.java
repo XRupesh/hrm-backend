@@ -19,8 +19,10 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
@@ -67,7 +69,7 @@ public class Employee extends BaseEntity {
     private Job job;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "department_id")
+    @JoinColumn(name = "department_id")
     private Department department;
 
     @ManyToOne(fetch = FetchType.LAZY)
