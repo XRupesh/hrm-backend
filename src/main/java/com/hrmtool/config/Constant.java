@@ -68,43 +68,43 @@ public class Constant {
             public static final String EMPLOYEE_CONTROLLER = API + EMPLOYEE;
             public static final String ADD_EMPLOYEE = "/registration";
 
-            public static final String UPDATE_EMPLOYEE = "/update";
+            public static final String UPDATE_EMPLOYEE = "/update/{employeeId}";
 
-            public static final String FETCH_BY_EMPLOYEE_ID = "/get/{organizationCode}";
+            public static final String FETCH_BY_EMPLOYEE_ID = "/get/{employeeId}";
 
             public static final String FETCH_ALL_EMPLOYEE = "/getAll";
 
-            public static final String DELETE_EMPLOYEE = "/delete/{organizationCode}";
+            public static final String DELETE_EMPLOYEE = "/delete/{employeeId}";
 
         }
 
         public final class Job {
 
             public static final String JOB_CONTROLLER = API + JOB;
-            public static final String ADD_JOB = "/registration";
+            public static final String ADD_JOB = "/add";
 
-            public static final String UPDATE_JOB = "/update";
+            public static final String UPDATE_JOB = "/update/{jobId}";
 
-            public static final String FETCH_BY_JOB_ID = "/get/{organizationCode}";
+            public static final String FETCH_BY_JOB_ID = "/get/{jobId}";
 
             public static final String FETCH_ALL_JOB = "/getAll";
 
-            public static final String DELETE_JOB = "/delete/{organizationCode}";
+            public static final String DELETE_JOB = "/delete/{jobId}";
 
         }
 
         public final class Department {
 
-            public static final String DEPARTMENT_CONTROLLER = API + EMPLOYEE;
-            public static final String ADD_DEPARTMENT = "/registration";
+            public static final String DEPARTMENT_CONTROLLER = API + DEPARTMENT;
+            public static final String ADD_DEPARTMENT = "/add";
 
-            public static final String UPDATE_DEPARTMENT = "/update";
+            public static final String UPDATE_DEPARTMENT = "/update/{departmentId}";
 
-            public static final String FETCH_BY_DEPARTMENT_ID = "/get/{organizationCode}";
+            public static final String FETCH_BY_DEPARTMENT_ID = "/get/{departmentId}";
 
             public static final String FETCH_ALL_DEPARTMENT = "/getAll";
 
-            public static final String DELETE_DEPARTMENT = "/delete/{organizationCode}";
+            public static final String DELETE_DEPARTMENT = "/delete/{departmentId}";
 
         }
     }

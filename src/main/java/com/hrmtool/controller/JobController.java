@@ -23,28 +23,28 @@ public class JobController {
 
     private static final Logger logger = LoggerFactory.getLogger(JobController.class);
 
-    @PostMapping
+    @PostMapping(value = Constant.Path.Job.ADD_JOB)
     public ResponseEntity<ApiResponse<JobDto>> createJob(@RequestBody JobDto jobDto) {
         logger.info("Job creation request: {}", jobDto);
         return jobService.createJob(jobDto);
     }
 
-    @GetMapping("/{jobId}")
+    @GetMapping(value = Constant.Path.Job.FETCH_BY_JOB_ID)
     public ResponseEntity<ApiResponse<JobDto>> getJob(@PathVariable Integer jobId) {
         return jobService.getJobById(jobId);
     }
 
-    @GetMapping
+    @GetMapping(value = Constant.Path.Job.FETCH_ALL_JOB)
     public ResponseEntity<ApiResponse<List<JobDto>>> getAllJobs() {
         return jobService.getAllJobs();
     }
 
-    @PutMapping("/{jobId}")
+    @PutMapping(value = Constant.Path.Job.UPDATE_JOB)
     public ResponseEntity<ApiResponse<JobDto>> updateJob(@PathVariable Integer jobId, @RequestBody JobDto jobDto) {
         return jobService.updateJob(jobId,jobDto);
     }
 
-    @DeleteMapping("/{jobId}")
+    @DeleteMapping(value = Constant.Path.Job.DELETE_JOB)
     public ResponseEntity<ApiResponse<JobDto>> deleteJob(@PathVariable Integer jobId) {
         return jobService.deleteJob(jobId);
     }

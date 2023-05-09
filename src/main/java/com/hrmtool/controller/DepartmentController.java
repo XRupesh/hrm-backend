@@ -22,28 +22,28 @@ public class DepartmentController {
 
     private static final Logger logger = LoggerFactory.getLogger(DepartmentController.class);
 
-    @PostMapping
+    @PostMapping(value = Constant.Path.Department.ADD_DEPARTMENT)
     public ResponseEntity<ApiResponse<DepartmentDto>> createDepartment(@RequestBody DepartmentDto departmentDto) {
         logger.info("Department creation request: {}", departmentDto);
         return departmentService.createDepartment(departmentDto);
     }
 
-    @GetMapping("/{departmentId}")
+    @GetMapping(value = Constant.Path.Department.FETCH_BY_DEPARTMENT_ID)
     public ResponseEntity<ApiResponse<DepartmentDto>> getDepartment(@PathVariable Integer departmentId) {
         return departmentService.getDepartmentById(departmentId);
     }
 
-    @GetMapping
+    @GetMapping(value = Constant.Path.Department.FETCH_ALL_DEPARTMENT)
     public ResponseEntity<ApiResponse<List<DepartmentDto>>> getAllDepartments() {
         return departmentService.getAllDepartments();
     }
 
-    @PutMapping("/{departmentId}")
+    @PutMapping(value = Constant.Path.Department.UPDATE_DEPARTMENT)
     public ResponseEntity<ApiResponse<DepartmentDto>> updateDepartment(@PathVariable Integer departmentId, @RequestBody DepartmentDto departmentDto) {
         return departmentService.updateDepartment(departmentId,departmentDto);
     }
 
-    @DeleteMapping("/{departmentId}")
+    @DeleteMapping(value = Constant.Path.Department.DELETE_DEPARTMENT)
     public ResponseEntity<ApiResponse<DepartmentDto>> deleteDepartment(@PathVariable Integer departmentId) {
         return departmentService.deleteDepartment(departmentId);
     }
