@@ -9,7 +9,7 @@ public class OpenApiConfig {
 
     @Bean
     public GroupedOpenApi publicApi() {
-        return GroupedOpenApi.builder()
+         return GroupedOpenApi.builder()
                 .group("public-api")
                 .pathsToMatch("/**")
                 .build();
