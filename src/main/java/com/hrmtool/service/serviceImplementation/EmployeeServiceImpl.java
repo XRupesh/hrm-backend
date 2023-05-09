@@ -1,6 +1,7 @@
 package com.hrmtool.service.serviceImplementation;
 import java.util.Optional;
 
+import com.hrmtool.globalHandler.NotFoundException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,8 +13,6 @@ import com.hrmtool.persistance.entity.Employee;
 import com.hrmtool.persistance.repository.EmployeeRepo;
 import com.hrmtool.service.EmployeeService;
 import com.hrmtool.service.SESService;
-
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
