@@ -67,7 +67,7 @@ public class Employee extends BaseEntity {
     private Job job;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "department_id")
+    @JoinColumn(name = "department_id")
     private Department department;
 
     @ManyToOne(fetch = FetchType.LAZY)
