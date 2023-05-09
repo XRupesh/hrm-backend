@@ -15,7 +15,7 @@
     <description>hrm-backend</description>
     <properties>
         <java.version>11</java.version>
-        <swagger-version>2.7.0</swagger-version>
+        <springdoc-version>1.5.13</springdoc-version>
     </properties>
     <dependencies>
         <dependency>
@@ -57,14 +57,14 @@
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${swagger-version}</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc-version}</version>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${swagger-version}</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-webmvc-core</artifactId>
+            <version>${springdoc-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
