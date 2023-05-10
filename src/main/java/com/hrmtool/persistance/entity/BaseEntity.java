@@ -1,8 +1,9 @@
 package com.hrmtool.persistance.entity;
 
+import lombok.Data;
 import javax.persistence.*;
 import java.util.Date;
-
+@Data
 @MappedSuperclass
 public abstract class BaseEntity {
     @Column(name = "created_date", nullable = false, updatable = false)
