@@ -1,11 +1,14 @@
 package com.hrmtool.persistance.entity;
 
-import java.time.LocalDate;
+import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +18,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.hrmtool.enums.EmploymentStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,9 +32,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "employee")
-public class Employee extends BaseEntity {
+public class Employee extends BaseEntity implements Serializable {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_code")
     private Integer employeeCode;
@@ -52,7 +62,7 @@ public class Employee extends BaseEntity {
     private String phoneNumber;
 
     @Column(name = "birth_date", nullable = false)
-    private LocalDate birthDate;
+    private Date birthDate;
 
     @Column(name = "gender")
     private String gender;
@@ -83,13 +93,14 @@ public class Employee extends BaseEntity {
     private String salaryType;
 
     @Column(name = "employment_status")
-    private Enum employmentStatus;
+    @Enumerated(EnumType.STRING)
+    private EmploymentStatus EmploymentStatus;
 
     @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
+    private Date startDate;
 
     @Column(name = "end_date")
-    private LocalDate endDate;
+    private Date endDate;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "employee_legal_entity",

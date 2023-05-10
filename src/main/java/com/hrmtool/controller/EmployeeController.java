@@ -1,6 +1,5 @@
 package com.hrmtool.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrmtool.config.Constant;
+import com.hrmtool.globalHandler.response.ApiResponse;
 import com.hrmtool.persistance.dto.EmployeeDto;
 import com.hrmtool.service.EmployeeService;
 
@@ -26,26 +26,41 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
+    /**
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Integer id) {
-        EmployeeDto employeeDto = employeeService.getEmployeeById(id);
-        return ResponseEntity.ok(employeeDto);
+    public ResponseEntity<ApiResponse<EmployeeDto>> getEmployeeById(@PathVariable Integer id) {
+        return  employeeService.getEmployeeById(id);
     }
 
-    @PostMapping
-    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeDto employeeDto) {
-        EmployeeDto createdEmployeeDto = employeeService.createEmployee(employeeDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdEmployeeDto);
+    /**
+     * @param employeeDto
+     * @return
+     */
+    @PostMapping("create")
+    public ResponseEntity<ApiResponse<EmployeeDto>> createEmployee(@RequestBody EmployeeDto employeeDto) {
+        return employeeService.createEmployee(employeeDto);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable Integer id, @RequestBody EmployeeDto employeeDto) {
+    /**
+     * @param id
+     * @param employeeDto
+     * @return
+     */
+    @PutMapping("update")
+    public ResponseEntity<ApiResponse<EmployeeDto>> updateEmployee(@PathVariable Integer id, @RequestBody EmployeeDto employeeDto) {
         employeeDto.setEmployeeCode(id);
-        EmployeeDto updatedEmployeeDto = employeeService.updateEmployee(employeeDto);
-        return ResponseEntity.ok(updatedEmployeeDto);
+       return employeeService.updateEmployee(employeeDto);
+     
     }
 
-    @DeleteMapping("/{id}")
+    /**
+     * @param id
+     * @return
+     */
+    @DeleteMapping("delete")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Integer id) {
         employeeService.deleteEmployeeById(id);
         return ResponseEntity.noContent().build();

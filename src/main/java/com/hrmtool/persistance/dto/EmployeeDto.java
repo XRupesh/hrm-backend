@@ -1,21 +1,13 @@
 package com.hrmtool.persistance.dto;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hrmtool.enums.EmploymentStatus;
-import com.hrmtool.persistance.entity.Department;
 import com.hrmtool.persistance.entity.Employee;
-import com.hrmtool.persistance.entity.Job;
 import com.hrmtool.persistance.entity.LegalEntity;
-import com.hrmtool.persistance.repository.DepartmentRepo;
-import com.hrmtool.persistance.repository.JobRepo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,11 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class EmployeeDto {
 
-	@Autowired
-	private JobRepo jobRepo;
 	
-	@Autowired
-	private DepartmentRepo departmentRepo;
 	
 	@JsonProperty("employee_code")
 	private Integer employeeCode;
@@ -54,7 +42,7 @@ public class EmployeeDto {
 	private String phoneNumber;
 
 	@JsonProperty("birth_date")
-	private LocalDate birthDate;
+	private Date birthDate;
 
 	private String gender;
 
@@ -83,15 +71,25 @@ public class EmployeeDto {
 	private String employmentStatus;
 
 	@JsonProperty("start_date")
-	private LocalDate startDate;
+	private Date startDate;
 
 	@JsonProperty("end_date")
-	private LocalDate endDate;
+	private Date endDate;
+	
+	/*@JsonProperty("create_date")
+	private Date createdDate;
+
+	@JsonProperty("modify_date")
+	private Date modifiedDate;
+	
+	 */
+	@JsonProperty("status")
+	private Boolean status;
 
 	@JsonProperty("legal_entities")
 	private Set<Integer> legalEntityIds = new HashSet<>();
 
-	public EmployeeDto(Employee employee) {
+	   public EmployeeDto(Employee employee) {
 		this.employeeCode = employee.getEmployeeCode();
 		this.firstName = employee.getFirstName();
 		this.middleName = employee.getMiddleName();
@@ -120,27 +118,8 @@ public class EmployeeDto {
 			this.legalEntityIds = employee.getLegalEntities().stream().map(LegalEntity::getId)
 					.collect(Collectors.toSet());
 		}
+	   this.status=status;
 	}
 
-	public Employee toEmployee() {
-		
-		Optional<Job>  empJob= jobRepo.findById(this.job);
-		Optional<Department>  empDepartment= departmentRepo.findById(this.department);
-		Job job=null;
-		Department department=null;
-		if(empJob.isPresent())
-		{
-			job=empJob.get();
-		}
-		if(empDepartment.isPresent())
-		{
-		 department =empDepartment.get();
-		}
-		return Employee.builder().employeeCode(this.employeeCode).firstName(this.firstName).middleName(this.middleName)
-				.lastName(this.lastName).email(this.email).phoneNumber(this.phoneNumber).birthDate(this.birthDate)
-				.gender(this.gender).maritalStatus(this.maritalStatus).street(this.address)
-				.job(job).department(department).salary(this.salary).salaryType(this.salaryType)
-				.employmentStatus(EmploymentStatus.valueOf(this.getEmploymentStatus())).startDate(this.startDate).endDate(this.endDate).build();
-	}
-
+	
 }
